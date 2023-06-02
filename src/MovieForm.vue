@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from "vue";
+import { reactive, onMounted, ref } from "vue";
 
 const emit = defineEmits(["update:modelValue", "cancel"]);
 const props = defineProps({
@@ -34,6 +34,12 @@ const form = reactive({
 const validations = reactive({
   name: "required",
   genres: "required",
+});
+
+const nameInput = ref(null);
+
+onMounted(() => {
+  nameInput.value.focus();
 });
 
 const validationRules = (rule) => {
@@ -100,47 +106,23 @@ function clearErrors() {
     <input type="hidden" name="id" v-model="form.id" />
     <div class="movie-form-input-wrapper">
       <label for="name">Name</label>
-      <input
-        type="text"
-        name="name"
-        v-model="form.name"
-        class="movie-form-input"
-      />
+      <input ref="nameInput" type="text" name="name" v-model="form.name" class="movie-form-input" />
       <span class="movie-form-error">{{ errors.name }}</span>
     </div>
     <div class="movie-form-input-wrapper">
       <label for="description">Description</label>
-      <textarea
-        type="text"
-        name="description"
-        v-model="form.description"
-        class="movie-form-textarea"
-      />
+      <textarea type="text" name="description" v-model="form.description" class="movie-form-textarea" />
       <span class="movie-form-error">{{ errors.description }}</span>
     </div>
     <div class="movie-form-input-wrapper">
       <label for="image">Image</label>
-      <input
-        type="text"
-        name="image"
-        v-model="form.image"
-        class="movie-form-input"
-      />
+      <input type="text" name="image" v-model="form.image" class="movie-form-input" />
       <span class="movie-form-error">{{ errors.image }}</span>
     </div>
     <div class="movie-form-input-wrapper">
       <label for="genre">Genres</label>
-      <select
-        name="genre"
-        v-model="form.genres"
-        class="movie-form-input"
-        multiple
-      >
-        <option
-          v-for="option in genres"
-          :key="option.value"
-          :value="option.value"
-        >
+      <select name="genre" v-model="form.genres" class="movie-form-input" multiple>
+        <option v-for="option in genres" :key="option.value" :value="option.value">
           {{ option.text }}
         </option>
       </select>
@@ -150,13 +132,8 @@ function clearErrors() {
     </div>
     <div class="movie-form-input-wrapper">
       <label for="genre" class="movie-form-checkbox-label">
-        <input
-          type="checkbox"
-          v-model="form.inTheaters"
-          :true-value="true"
-          :false-value="false"
-          class="movie-form-checkbox"
-        />
+        <input type="checkbox" v-model="form.inTheaters" :true-value="true" :false-value="false"
+          class="movie-form-checkbox" />
         <span>In theaters</span>
       </label>
       <span class="movie-form-error">
